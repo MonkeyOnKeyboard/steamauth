@@ -52,8 +52,4 @@ return [
     'steamauth.confirmclear' => 'M&ouml;chtest du wirklich den gesamten Log l&ouml;schen?',
 
     'steamauth.messages.registrationNotAllowed' => 'Die Anmeldung ist aktuell geschlossen.',
-    
-    
-    
-    
 ];

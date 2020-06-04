@@ -15,7 +15,6 @@ function mist($mixed = [])
     return $content;
 }
 
-
 class DbLog extends Mapper {
     /**
      * Shortcut for an info log message
@@ -27,12 +26,11 @@ class DbLog extends Mapper {
      *
      **
      */
-    
     public function info($message, $data = [])
     {
         return $this->log('info', $message, $data);
     }
-    
+
     /**
      * Shortcut for an debug log message
      *
@@ -46,12 +44,17 @@ class DbLog extends Mapper {
         //        $data = mist($data);
         return $this->log('dump', $message, $data);
     }
-    
+
+    /**
+     * @param $message
+     * @param array $data
+     * @return int
+     */
     public function debug($message, $data = [])
     {
         return $this->log('debug', $message, $data);
     }
-    
+
     /**
      * Shortcut for an error log message
      *
@@ -64,7 +67,7 @@ class DbLog extends Mapper {
     {
         return $this->log('error', $message, $data);
     }
-    
+
     /**
      * Inserts a log message into the database
      *
@@ -79,7 +82,7 @@ class DbLog extends Mapper {
         if (! $this->isValidJson($data)) {
             $data = json_encode($data);
         }
-        
+
         return $this->db()
         ->insert('steamauth_log')
         ->values([
@@ -90,7 +93,7 @@ class DbLog extends Mapper {
         ])
         ->execute();
     }
-    
+
     /**
      * Get log messages
      *
@@ -98,16 +101,14 @@ class DbLog extends Mapper {
      */
     public function getAll()
     {
-        $result = $this->db()
+        return $this->db()
         ->select('*')
         ->from('steamauth_log')
         ->order(['created_at' => 'DESC'])
         ->limit(50)
         ->execute();
-        
-        return $result;
     }
-    
+
     /**
      * Finds the log message with the given id
      *
@@ -126,7 +127,7 @@ class DbLog extends Mapper {
         ->execute()
         ->fetchObject(Log::class, []);
     }
-    
+
     /**
      * Clears the log
      *
@@ -134,12 +135,11 @@ class DbLog extends Mapper {
      */
     public function clear()
     {
-        return
-        $this->db()->delete('steamauth_log')
+        return $this->db()->delete('steamauth_log')
         ->where(['id >' => 0])
         ->execute();
     }
-    
+
     /**
      * Deletes the given log message
      *
@@ -152,17 +152,17 @@ class DbLog extends Mapper {
     public function delete($logId)
     {
         $log = $this->find($logId);
-        
+
         if (is_null($log)) {
             throw new \Exception('No log with id '. $logId . ' found.');
         }
-        
+
         return $this->db()
         ->delete('steamauth_log')
         ->where(['id' => $log->getId()])
         ->execute();
     }
-    
+
     /**
      * Checks if the value is valid json
      *
@@ -173,7 +173,7 @@ class DbLog extends Mapper {
     protected function isValidJson($value)
     {
         $temp = @json_decode($value, true);
-        
+
         return json_last_error() === JSON_ERROR_NONE && ! is_null($temp);
     }
 }

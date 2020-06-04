@@ -9,31 +9,14 @@ class Log extends Base
     
     public function indexAction()
     {
-        
         $this->getLayout()->getAdminHmenu()
             ->add($this->getTranslator()->trans('steamauth.menu.signinwithapi'), ['controller' => 'index', 'action' => 'index'])
             ->add($this->getTranslator()->trans('steamauth.menu.logs'), ['action' => 'index']);
 
-            $dbLog = new DbLog();
-
-/*            $mytest=            [
-                'userId' => currentUser()->getId(),
-                'userName' => currentUser()->getName(),
-                'wargamingAccount' => "Test"
-            ];
-            
-        $dbLog->dump(
-            "Modul aktiv",
-            $mytest
-            );
-*/        
+        $dbLog = new DbLog();
         $this->getView()->set('logs', $dbLog->getAll());
-
     }
-    
-    
-    
-    
+
     public function clearAction()
     {
         if (! $this->getRequest()->isPost()) {

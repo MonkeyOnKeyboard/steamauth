@@ -27,14 +27,13 @@ class Auth extends Frontend
      */
     public function registAction()
     {
-        
         if (! array_dot($_SESSION, 'steamauth.login') || array_dot($_SESSION, 'steamauth.login.expires') < time() ) {
             $this->addMessage('steamauth.logindenied', 'danger');
             $this->redirect(['module' => 'user', 'controller' => 'login', 'action' => 'index']);
         }
 
         $oauth = array_dot($_SESSION, 'steamauth.login');
-        
+
         $this->getView()->set('rules', $this->getConfig()->get('regist_rules'));
         $this->getView()->set('user', $oauth);
     }
@@ -66,10 +65,8 @@ class Auth extends Frontend
             
         ]);
         
-        
         $oauth = array_dot($_SESSION, 'steamauth.login');
-        
-        
+
         if ($validation->isValid()) {
             // register user
             $registMapper = new UserMapper();
@@ -86,10 +83,6 @@ class Auth extends Frontend
                 ->setDateConfirmed($currentDate->format('Y-m-d H:i:s', true));
 
             $userId = $registMapper->save($user);
-           
-            
-
-            
 
             $authProviderUser = (new AuthProviderUser())
                 ->setIdentifier($oauth['user_id'])
@@ -153,8 +146,6 @@ class Auth extends Frontend
             'action' => 'callback',
         ]);
 
-
- 
         $auth = new SteamOAuth(
             $this->getConfig()->get('steamauth_apikey'),
             $_SERVER['SERVER_NAME'],
@@ -162,23 +153,15 @@ class Auth extends Frontend
             null,
             false
             );
-        
-        
-        
+
         try {
-
-
             $this->redirect($auth->loginUrl());
-            
-            
         } catch (\Exception $e) {
             $this->addMessage('steamauth.authenticationfailure', 'danger');
-            
-                            
 
             if (loggedIn()) {
                 $this->redirect(['module' => 'user', 'controller' => 'panel', 'action' => 'providers']);
-            
+
                 $this->dbLog()->info(
                     "User " . currentUser()->getName() . " has an login error.",
                     [
@@ -190,9 +173,7 @@ class Auth extends Frontend
             }
 
             $this->redirect(['module' => 'user', 'controller' => 'login', 'action' => 'index']);
- 
         }
-                   
     }
 
     /**
@@ -200,28 +181,11 @@ class Auth extends Frontend
      */
     public function callbackAction()
     {
-
-
         $auth = new SteamOAuth(
             $this->getConfig()->get('steamauth_apikey')
         );
 
         try {
-
-            /**
-             *  DEBUG 
-             * 
-            echo "<hr>";
-            
-            $auth->debug();
-            
-            echo "<hr>";
-            
-            die();
-            **/
-        
-            
-            
             $steamUser = array(
                 'user_id' => $auth->steamid,
                 'oauth_token' => $auth->primaryclanid,
@@ -232,7 +196,6 @@ class Auth extends Frontend
 
             $authProvider = new AuthProvider();
             $existingLink = $authProvider->providerAccountIsLinked('steam', $steamUser['user_id']);
-
 
             if (loggedIn()) {
                 if ($authProvider->hasProviderLinked('steam', currentUser()->getId())) {
@@ -245,8 +208,6 @@ class Auth extends Frontend
                         ]
                     );
 
-
-                    
                     $this->addMessage('providerAlreadyLinked', 'danger');
                     $this->redirect(['module' => 'user', 'controller' => 'panel', 'action' => 'providers']);
                 }
@@ -310,14 +271,8 @@ class Auth extends Frontend
                     $this->redirect(['module' => 'user', 'controller' => 'login', 'action' => 'index']);
                 }
 
-                
-                
-                                
-                
                 $_SESSION['user_id'] = $userId;
-                
-                
-                                
+
                 $this->addMessage('steamauth.loginsuccess');
                 $this->redirect('/');
             }
@@ -329,10 +284,8 @@ class Auth extends Frontend
 
             array_dot_set($_SESSION, 'steamauth.login', $steamUser);
             array_dot_set($_SESSION, 'steamauth.login.expires', strtotime('+5 minutes'));
-            //array_dot_set($_SESSION, 'steamauth.login.expires', $steamUser['expires_at']);
 
             $this->redirect(['action' => 'regist']);
-
         } catch (\Exception $e) {
             $this->addMessage('steamauth.authenticationfailure', 'danger');
 

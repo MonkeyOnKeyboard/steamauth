@@ -19,8 +19,6 @@ use Ilch\Redirect;
 
 class SteamAuth
 {
-    
-    
     protected $settings = array(
         "apikey" => "", // Get yours today from http://steamcommunity.com/dev/apikey
         "domainname" => "", // Displayed domain in the login-screen
@@ -28,31 +26,31 @@ class SteamAuth
         "logoutpage" => "",
         "skipAPI" => false, // true = dont get the data from steam, just return the steamid64
     );
-    
+
     public function __construct($apikey = null, $domainname = null, $loginpage = null, $logoutpage = null, $skipAPI = false)
     {
         if (session_id() == "") {
             session_start();
         }
-        
+
         // if params were passed as array
         if (is_array($apikey)) {
             foreach ($apikey as $key => $val) {
                 $$key = $val;
             }
         }
-        
+
         $this->settings["apikey"] = $apikey;
         $this->settings["domainname"] = $domainname;
         $this->settings["loginpage"] = $loginpage;
         $this->settings["logoutpage"] = $logoutpage;
         $this->settings["skipAPI"] = $skipAPI;
-        
+
         // Start a session if none exists
         if ($this->settings["apikey"] == "") {
             die("<b>SteamAuth:</b> Please supply a valid API-Key!");
         }
-        
+
         if ($this->settings["loginpage"] == "") {
             $this->settings["loginpage"] = /* [ */(!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'];
         }
@@ -70,19 +68,16 @@ class SteamAuth
                 foreach ($apiresp["response"]["players"][0] as $key => $value) {
                     $_SESSION["steamdata"][$key] = $value;
                 }
-                
             }
         }
         if (isset($_SESSION["steamdata"]["steamid"])) {
             // If we are logged in, make user-data accessable through $steam->var
             foreach ($_SESSION["steamdata"] as $key => $value) {
                 $this->{$key} = $value;
-                
             }
-            
         }
     }
-    
+
     /**
      * Generate SteamLogin-URL
      * @copyright loginUrl function (c) 2010 ichimonai.com, released under MIT-License
@@ -100,7 +95,7 @@ class SteamAuth
         );
         return 'https://steamcommunity.com/openid/login' . '?' . http_build_query($params, '', "&");
     }
-    
+
     /*
      * Validate data against Steam-Servers
      * @copyright validate function (c) 2010 ichimonai.com, released under MIT-License
@@ -148,6 +143,7 @@ class SteamAuth
         // Return our final value
         return preg_match("#is_valid\s*:\s*true#i", $result) == 1 ? $steamID64 : '';
     }
+
     public function logout()
     {
         if (!$this->loggedIn()) {
@@ -165,10 +161,12 @@ class SteamAuth
         // If the logout-page is set, go there
         return true;
     }
+
     public function loggedIn()
     {
         return (isset($_SESSION["steamdata"]["steamid"]) && $_SESSION["steamdata"]["steamid"] != "") ? true : false;
     }
+
     public function forceReload()
     {
         if (!isset($_SESSION["steamdata"]["steamid"])) {
@@ -178,17 +176,15 @@ class SteamAuth
         @$apiresp = json_decode(file_get_contents("https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=" . $this->settings["apikey"] . "&steamids=" . $_SESSION["steamdata"]["steamid"]), true);
         foreach ($apiresp["response"]["players"][0] as $key => $value) {
             $_SESSION["steamdata"][$key] = $value;
-            
-            
         }
         
         foreach ($_SESSION["steamdata"] as $key => $value) {
             $this->{$key} = $value;
-            
         }
         // Make user-data accessable through $steam->var
         return true;
     }
+
     /**
      * Prints debug information about steamauth
      */

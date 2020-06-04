@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Ilch 2.0
+ * @copyright Ilch 2
  * @package ilch
  */
 
@@ -40,8 +40,6 @@ class Config extends \Ilch\Config\Install
                 ->execute();
         }
 
-        
-
        $this->db()->query('
             CREATE TABLE IF NOT EXISTS `[prefix]_steamauth_log` (
               `id` int(32) unsigned NOT NULL AUTO_INCREMENT,
@@ -52,7 +50,7 @@ class Config extends \Ilch\Config\Install
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ');
-       
+
         $this->db()
             ->insert('auth_providers_modules')
             ->values([
@@ -64,9 +62,7 @@ class Config extends \Ilch\Config\Install
                 'unlink_action' => 'unlink',
             ])
             ->execute();
-            
-            
-            
+
             $databaseConfig = new \Ilch\Config\Database($this->db());
             $databaseConfig->set('steamauth_apikey', '');
             
@@ -86,28 +82,13 @@ class Config extends \Ilch\Config\Install
             ->where(['key' => 'steam'])
             ->execute();
 
-            
-            $this->db()->queryMulti("
-                DELETE FROM `[prefix]_config` WHERE `key` = 'steamauth_apikey';
-                                
-                  ");
-
-            
+            $this->db()->queryMulti("DELETE FROM `[prefix]_config` WHERE `key` = 'steamauth_apikey';");
     }
 
-    
-    
-    
     public function getUpdate($installedVersion)
     {
-        switch ($installedVersion) {
-            
-            case "1.0.0":
-                // Anweisungen
-           
-        }
+
     }
-    
 
     /**
      * @return boolean
