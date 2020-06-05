@@ -19,13 +19,13 @@ use Ilch\Redirect;
 
 class SteamAuth
 {
-    protected $settings = array(
+    protected $settings = [
         "apikey" => "", // Get yours today from http://steamcommunity.com/dev/apikey
         "domainname" => "", // Displayed domain in the login-screen
         "loginpage" => "", // Returns to last page if not set
         "logoutpage" => "",
         "skipAPI" => false, // true = dont get the data from steam, just return the steamid64
-    );
+    ];
 
     public function __construct($apikey = null, $domainname = null, $loginpage = null, $logoutpage = null, $skipAPI = false)
     {
@@ -57,7 +57,7 @@ class SteamAuth
         // Code (c) 2010 ichimonai.com, released under MIT-License
         if (isset($_GET["openid_assoc_handle"]) && !isset($_SESSION["steamdata"]["steamid"])) {
             // Did we just return from steam login-page? If so, validate idendity and save the data
-            $steamid = $this->validate();
+            $steamid = self::validate();
             if ($steamid != "") {
                 // ID Proven, get data from steam and save them
                 if ($this->settings["skipAPI"]) {
@@ -164,7 +164,7 @@ class SteamAuth
 
     public function loggedIn()
     {
-        return (isset($_SESSION["steamdata"]["steamid"]) && $_SESSION["steamdata"]["steamid"] != "") ? true : false;
+        return isset($_SESSION["steamdata"]["steamid"]) && $_SESSION["steamdata"]["steamid"] != "";
     }
 
     public function forceReload()

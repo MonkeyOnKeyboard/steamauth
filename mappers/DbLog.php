@@ -10,9 +10,7 @@ function mist($mixed = [])
 {
     ob_start();
     print_r($mixed);
-    $content = [ "vardump" => ob_get_contents()];
-    ob_end_clean();
-    return $content;
+    return [ "vardump" => ob_get_clean()];
 }
 
 class DbLog extends Mapper {

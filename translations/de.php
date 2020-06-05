@@ -45,7 +45,7 @@ return [
     'steamauth.logdeletederror' => 'Der ausgew&auml;hlte Log konnte nicht gel&ouml;scht werden.',
     'steamauth.logdeletedsuccessful' => 'Der ausgew&auml;hlte Log wurde erfolgreich gel&ouml;scht.',
 
-    'steamauth.authenticationFailure' => 'Es ist ein Fehler bei der Kommunikation mit der wargaming API aufgetreten, bitte versuche es später erneut.',
+    'steamauth.authenticationFailure' => 'Es ist ein Fehler bei der Kommunikation mit der Steam API aufgetreten, bitte versuche es später erneut.',
     'steamauth.methodnotallowed' => 'Diese HTTP-Methode ist nicht erlaubt',
     'steamauth.couldnotclearlog' => 'Der Log konnte nicht geleert werden.',
     'steamauth.loghasbeencleared' => 'Der Log wurde geleert.',

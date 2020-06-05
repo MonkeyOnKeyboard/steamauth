@@ -186,13 +186,12 @@ class Auth extends Frontend
         );
 
         try {
-            $steamUser = array(
+            $steamUser = [
                 'user_id' => $auth->steamid,
                 'oauth_token' => $auth->primaryclanid,
                 'screen_name' => $auth->personaname,
-              'oauth_token_user' => null,
-              
-            );
+                'oauth_token_user' => null,
+            ];
 
             $authProvider = new AuthProvider();
             $existingLink = $authProvider->providerAccountIsLinked('steam', $steamUser['user_id']);

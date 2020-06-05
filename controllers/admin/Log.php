@@ -6,7 +6,6 @@ use Modules\Steamauth\Mappers\DbLog;
 
 class Log extends Base
 {
-    
     public function indexAction()
     {
         $this->getLayout()->getAdminHmenu()

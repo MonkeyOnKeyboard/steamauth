@@ -11,14 +11,14 @@ class Index extends Base
         $this->getLayout()->getAdminHmenu()
         ->add($this->getTranslator()->trans('steamauth.menu.signinwithapi'), ['action' => 'index'])
         ->add($this->getTranslator()->trans('steamauth.menu.apikeys'), ['action' => 'index']);
-        
+
         $output = [
             'consumerKey' => $this->getConfig()->get('steamauth_apikey'),
         ];
 
         $this->getView()->set('steamauth', $output);
     }
-    
+
     public function saveAction()
     {
         if ($this->getRequest()->isPost()) {
@@ -26,7 +26,7 @@ class Index extends Base
             $newkey = $this->getRequest()->getPost('consumerKey');
             $this->getConfig()->set('steamauth_apikey', $newkey);
             $dbLog = new DbLog();
-            
+
             $dbLog->dump(
                 "API Key gespeichert",
                 ["oldkey" => $oldkey,
@@ -36,7 +36,7 @@ class Index extends Base
 
             $this->addMessage('saveSuccess');
         }
-        
+
         $this->redirect(['action' => 'index']);
     }
 }
