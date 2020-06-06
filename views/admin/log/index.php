@@ -71,7 +71,7 @@
 
 <div class="panel panel-default">
     <div class="panel-heading clearfix">
-        <i class="fa fa-list"></i> <?= $this->getTrans('steamauth.logmessages') ?>
+        <i class="fas fa-list"></i> <?= $this->getTrans('steamauth.logmessages') ?>
         <form id="clearAll" action="<?= $this->getUrl(['action' => 'clear']) ?>" method="POST" class="pull-right">
             <?= $this->getTokenField() ?>
 
@@ -79,7 +79,7 @@
                 if (confirm('<?= $this->getTrans('steamauth.confirmclear') ?>')) {
                 document.getElementById('clearAll').submit();
                 }">
-                <i class="fa fa-trash"></i> <?= $this->getTrans('steamauth.clearlogs') ?>
+                <i class="fas fa-trash-alt"></i> <?= $this->getTrans('steamauth.clearlogs') ?>
             </button>
         </form>
     </div>
@@ -101,7 +101,7 @@
                     <?php if ($log->hasData()): ?>
                         <div class="inspect">
                             <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#inspectLogMessage-<?= $log->getId() ?>">
-                                <i class="fa fa-search"></i>
+                                <i class="fas fa-search"></i>
                             </button>
                         </div>
                     <?php endif; ?>
@@ -113,7 +113,7 @@
                                 if (confirm('<?= $this->getTrans('steamauth.confirmdelete') ?>')) {
                                     document.getElementById('deleteLogMessage-<?= $log->getId() ?>').submit();
                                 }">
-                                <i class="fa fa-trash"></i>
+                                <i class="fas fa-trash-alt"></i>
                             </button>
                         </form>
                     </div>

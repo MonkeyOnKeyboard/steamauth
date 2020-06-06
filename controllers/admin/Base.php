@@ -14,13 +14,13 @@ class Base extends Admin {
             [
                 'name' => 'steamauth.menu.apikeys',
                 'active' => $this->isActive('index', 'index'),
-                'icon' => 'fa fa-cog',
+                'icon' => 'fas fa-cog',
                 'url' => $this->getLayout()->getUrl(['controller' => 'index', 'action' => 'index'])
             ],
             [
                 'name' => 'steamauth.menu.logs',
                 'active' => $this->isActive('log', 'index'),
-                'icon' => 'fa fa-list',
+                'icon' => 'fas fa-list',
                 'url' => $this->getLayout()->getUrl(['controller' => 'log', 'action' => 'index'])
             ]
         ];
