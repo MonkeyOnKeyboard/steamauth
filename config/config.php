@@ -12,6 +12,7 @@ class Config extends \Ilch\Config\Install
         'key' => 'steamauth',
         'icon_small' => 'fa-steam-square',
         'author' => 'FAOS | MonkeyOnKeyboard',
+        'hide_menu' => true,
         'version' => '1.0.0',
         'languages' => [
             'de_DE' => [
@@ -65,7 +66,7 @@ class Config extends \Ilch\Config\Install
 
             $databaseConfig = new \Ilch\Config\Database($this->db());
             $databaseConfig->set('steamauth_apikey', '');
-            
+
     }
 
     public function uninstall()
@@ -82,7 +83,10 @@ class Config extends \Ilch\Config\Install
             ->where(['key' => 'steam'])
             ->execute();
 
-            $this->db()->queryMulti("DELETE FROM `[prefix]_config` WHERE `key` = 'steamauth_apikey';");
+            $this->db()->queryMulti("
+            DELETE FROM `[prefix]_config` WHERE `key` = 'steamauth_apikey';
+            DROP TABLE IF EXISTS `[prefix]_steamauth_log`;
+            ");
     }
 
     public function getUpdate($installedVersion)
