@@ -56,15 +56,15 @@ class Auth extends Frontend
         $input = [
             'userName' => trim($this->getRequest()->getPost('userName')),
             'email' => trim($this->getRequest()->getPost('email')),
-            
+
         ];
 
         $validation = Validation::create($input, [
             'userName' => 'required|unique:users,name',
             'email' => 'required|email|unique:users,email',
-            
+
         ]);
-        
+
         $oauth = array_dot($_SESSION, 'steamauth.login');
 
         if ($validation->isValid()) {
@@ -86,7 +86,7 @@ class Auth extends Frontend
 
             $authProviderUser = (new AuthProviderUser())
                 ->setIdentifier($oauth['user_id'])
-                ->setProvider('steam')
+                ->setProvider('steamauth_steam')
                 ->setOauthToken($oauth['oauth_token'])
                 ->setOauthTokenSecret($oauth['oauth_token_secret'])
                 ->setScreenName($oauth['screen_name'])
@@ -116,7 +116,7 @@ class Auth extends Frontend
         if (loggedIn()) {
             if ($this->getRequest()->isPost()) {
                 $authProvider = new AuthProvider();
-                $res = $authProvider->unlinkUser('steam', currentUser()->getId());
+                $res = $authProvider->unlinkUser('steamauth_steam', currentUser()->getId());
 
                 if ($res > 0) {
                     $this->addMessage('steamauth.unlinkedsuccessfully');
@@ -194,10 +194,10 @@ class Auth extends Frontend
             ];
 
             $authProvider = new AuthProvider();
-            $existingLink = $authProvider->providerAccountIsLinked('steam', $steamUser['user_id']);
+            $existingLink = $authProvider->providerAccountIsLinked('steamauth_steam', $steamUser['user_id']);
 
             if (loggedIn()) {
-                if ($authProvider->hasProviderLinked('steam', currentUser()->getId())) {
+                if ($authProvider->hasProviderLinked('steamauth_steam', currentUser()->getId())) {
                     $this->dbLog()->info(
                         "User " . currentUser()->getName() . " had provider already linked.",
                         [
@@ -227,7 +227,7 @@ class Auth extends Frontend
 
                 $authProviderUser = (new AuthProviderUser())
                     ->setIdentifier($steamUser['user_id'])
-                    ->setProvider('steam')
+                    ->setProvider('steamauth_steam')
                     ->setOauthToken($steamUser['oauth_token'])
                     ->setOauthTokenSecret($steamUser['oauth_token_user'])
                     ->setScreenName($steamUser['screen_name'])
@@ -263,7 +263,7 @@ class Auth extends Frontend
             }
 
             if ($existingLink === true) {
-                $userId = $authProvider->getUserIdByProvider('steam', $steamUser['user_id']);
+                $userId = $authProvider->getUserIdByProvider('steamauth_steam', $steamUser['user_id']);
 
                 if (is_null($userId)) {
                     $this->addMessage('couldNotFindRequestedUser');

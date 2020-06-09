@@ -34,7 +34,7 @@ class Config extends \Ilch\Config\Install
             $this->db()
                 ->insert('auth_providers')
                 ->values([
-                    'key' => 'steam',
+                    'key' => 'steamauth_steam',
                     'name' => 'Steam',
                     'icon' => 'fa-steam-square'
                 ])
@@ -56,7 +56,7 @@ class Config extends \Ilch\Config\Install
             ->insert('auth_providers_modules')
             ->values([
                 'module' => 'steamauth',
-                'provider' => 'steam',
+                'provider' => 'steamauth_steam',
                 'auth_controller' => 'auth',
                 'auth_action' => 'index',
                 'unlink_controller' => 'auth',
@@ -80,7 +80,7 @@ class Config extends \Ilch\Config\Install
         $this->db()
             ->delete()
             ->from('auth_providers')
-            ->where(['key' => 'steam'])
+            ->where(['key' => 'steamauth_steam'])
             ->execute();
 
             $this->db()->queryMulti("
@@ -102,7 +102,7 @@ class Config extends \Ilch\Config\Install
         return (bool) $this->db()
             ->select('key')
             ->from('auth_providers')
-            ->where(['key' => 'steam'])
+            ->where(['key' => 'steamauth_steam'])
             ->useFoundRows()
             ->execute()
             ->getFoundRows();
