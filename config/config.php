@@ -13,7 +13,7 @@ class Config extends \Ilch\Config\Install
         'icon_small' => 'fa-steam-square',
         'author' => 'FAOS | MonkeyOnKeyboard',
         'hide_menu' => true,
-        'version' => '1.0.1',
+        'version' => '1.0.2',
         'languages' => [
             'de_DE' => [
                 'name' => 'Anmelden mit Steam',
@@ -91,13 +91,11 @@ class Config extends \Ilch\Config\Install
 
     public function getUpdate($installedVersion)
     {
-      switch ($installedVersion) {
+        switch ($installedVersion) {
             case "1.0.0":
-                // Anweisungen
-
             case "1.0.1":
-            
-          }
+
+        }
     }
 
     /**

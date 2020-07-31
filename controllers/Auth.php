@@ -14,6 +14,7 @@ use Modules\User\Models\AuthToken as AuthTokenModel;
 use Modules\User\Models\User;
 use Modules\User\Service\Password as PasswordService;
 use Ilch\Validation;
+use Modules\User\Mappers\CookieStolen as CookieStolenMapper;
 
 class Auth extends Frontend
 {
@@ -27,12 +28,12 @@ class Auth extends Frontend
      */
     public function registAction()
     {
-        if (! array_dot($_SESSION, 'steamauth.login') || array_dot($_SESSION, 'steamauth.login.expires') < time() ) {
+        $oauth = array_dot($_SESSION, 'steamauth.login');
+
+        if (!$oauth || array_dot($_SESSION, 'steamauth.login.expires') < time() ) {
             $this->addMessage('steamauth.logindenied', 'danger');
             $this->redirect(['module' => 'user', 'controller' => 'login', 'action' => 'index']);
         }
-
-        $oauth = array_dot($_SESSION, 'steamauth.login');
 
         $this->getView()->set('rules', $this->getConfig()->get('regist_rules'));
         $this->getView()->set('user', $oauth);
@@ -48,24 +49,22 @@ class Auth extends Frontend
             $this->redirect('/');
         }
 
-        if (! array_dot($_SESSION, 'steamauth.login') || array_dot($_SESSION, 'steamauth.login.expires') < time()) {
-            $this->addMessage('badRequest');
+        $oauth = array_dot($_SESSION, 'steamauth.login');
+
+        if (!$oauth || array_dot($_SESSION, 'steamauth.login.expires') < time()) {
+            $this->addMessage('steamauth.logindenied');
             $this->redirect(['module' => 'user', 'controller' => 'login', 'action' => 'index']);
         }
 
         $input = [
             'userName' => trim($this->getRequest()->getPost('userName')),
             'email' => trim($this->getRequest()->getPost('email')),
-
         ];
 
         $validation = Validation::create($input, [
             'userName' => 'required|unique:users,name',
             'email' => 'required|email|unique:users,email',
-
         ]);
-
-        $oauth = array_dot($_SESSION, 'steamauth.login');
 
         if ($validation->isValid()) {
             // register user
@@ -95,13 +94,14 @@ class Auth extends Frontend
             $link = (new AuthProvider())->linkProviderWithUser($authProviderUser);
 
             if ($link === true) {
-                $_SESSION['user_id'] = $userId;
+                $this->login($userId);
+
                 $this->addMessage('steamauth.linksuccess');
                 $this->redirect(['module' => 'user', 'controller' => 'panel', 'action' => 'index']);
             }
 
             $this->addMessage('steamauth.linkfailed', 'danger');
-            $this->redirect('/');
+            $this->redirect(['module' => 'user', 'controller' => 'login', 'action' => 'index']);
         }
 
         $this->addMessage($validation->getErrorBag()->getErrorMessages(), 'danger', true);
@@ -114,8 +114,10 @@ class Auth extends Frontend
     public function unlinkAction()
     {
         if (loggedIn()) {
+            $authProvider = new AuthProvider();
+            $authProviderUser = $authProvider->getLinkedProviderDetails('wargaming', currentUser()->getId());
+
             if ($this->getRequest()->isPost()) {
-                $authProvider = new AuthProvider();
                 $res = $authProvider->unlinkUser('steamauth_steam', currentUser()->getId());
 
                 if ($res > 0) {
@@ -124,15 +126,15 @@ class Auth extends Frontend
                 }
 
                 $this->addMessage('steamauth.couldnotunlink', 'danger');
-                $this->redirect('/');
+                $this->redirect(['module' => 'user', 'controller' => 'panel', 'action' => 'providers']);
             }
 
             $this->addMessage('steamauth.badrequest', 'danger');
-            $this->redirect('/');
+            $this->redirect(['module' => 'user', 'controller' => 'panel', 'action' => 'providers']);
         }
 
         $this->addMessage('steamauth.notauthenticated', 'danger');
-        $this->redirect('/');
+        $this->redirect(['module' => 'user', 'controller' => 'panel', 'action' => 'providers']);
     }
 
     /**
@@ -145,6 +147,11 @@ class Auth extends Frontend
             'controller' => 'auth',
             'action' => 'callback',
         ]);
+    
+        if ($this->getRequest()->getPost('rememberMe')) {
+            $_SESSION['steamauth']['rememberMe'] = $this->getRequest()->getPost('rememberMe');
+        }
+        $_SESSION['steamauth']['login_redirect_url'] = $this->getRequest()->getPost('login_redirect_url');
 
         $auth = new SteamOAuth(
             $this->getConfig()->get('steamauth_apikey'),
@@ -159,17 +166,24 @@ class Auth extends Frontend
         } catch (\Exception $e) {
             $this->addMessage('steamauth.authenticationfailure', 'danger');
 
+            if (!loggedIn()){
+                $userMapper = new UserMapper();
+                $currentUser = $userMapper->getDummyUser();
+            }else{
+                $currentUser = currentUser();
+            }
+
+            $this->dbLog()->info(
+                "User " . $currentUser->getName() . " has an login error.",
+                [
+                    'userId' => $currentUser->getId(),
+                    'userName' => $currentUser->getName(),
+                    'message' => $e->getMessage(),
+                ]
+            );
+
             if (loggedIn()) {
                 $this->redirect(['module' => 'user', 'controller' => 'panel', 'action' => 'providers']);
-
-                $this->dbLog()->info(
-                    "User " . currentUser()->getName() . " has an login error.",
-                    [
-                        'userId' => currentUser()->getId(),
-                        'userName' => currentUser()->getName(),
-                        'message' => $e->getMessage(),
-                    ]
-                    );
             }
 
             $this->redirect(['module' => 'user', 'controller' => 'login', 'action' => 'index']);
@@ -181,9 +195,13 @@ class Auth extends Frontend
      */
     public function callbackAction()
     {
+        $redirectUrl = ['module' => 'user', 'controller' => 'login', 'action' => 'index'];
+
         $auth = new SteamOAuth(
             $this->getConfig()->get('steamauth_apikey')
         );
+        
+        $steamUser = [];
 
         try {
             $steamUser = [
@@ -258,22 +276,22 @@ class Auth extends Frontend
                     ]
                 );
 
-                $this->addMessage('linkFailed', 'danger');
+                $this->addMessage('steamauth.linkFailed', 'danger');
                 $this->redirect(['module' => 'user', 'controller' => 'panel', 'action' => 'providers']);
             }
 
             if ($existingLink === true) {
                 $userId = $authProvider->getUserIdByProvider('steamauth_steam', $steamUser['user_id']);
 
-                if (is_null($userId)) {
-                    $this->addMessage('couldNotFindRequestedUser');
-                    $this->redirect(['module' => 'user', 'controller' => 'login', 'action' => 'index']);
+                $this->login($userId);
+                
+                if (!empty($_SESSION['steamauth']['login_redirect_url'])) {
+                    $redirectUrl = $_SESSION['steamauth']['login_redirect_url'];
+                    unset($_SESSION['steamauth']['login_redirect_url']);
                 }
 
-                $_SESSION['user_id'] = $userId;
-
                 $this->addMessage('steamauth.loginsuccess');
-                $this->redirect('/');
+                $this->redirect($redirectUrl);
             }
 
             if ($existingLink === false && ! loggedIn() && ! $this->getConfig()->get('regist_accept')) {
@@ -288,12 +306,71 @@ class Auth extends Frontend
         } catch (\Exception $e) {
             $this->addMessage('steamauth.authenticationfailure', 'danger');
 
+            if (!loggedIn()){
+                $userMapper = new UserMapper();
+                $currentUser = $userMapper->getDummyUser();
+            }else{
+                $currentUser = currentUser();
+            }
+            
+            $this->dbLog()->info(
+                "User " . $currentUser->getName() . " has an login error.",
+                [
+                    'userId' => $currentUser->getId(),
+                    'userName' => $currentUser->getName(),
+                    'message' => $e->getMessage(),
+                ]
+            );
+
             if (loggedIn()) {
                 $this->redirect(['module' => 'user', 'controller' => 'panel', 'action' => 'providers']);
             } else {
                 $this->redirect(['module' => 'user', 'controller' => 'login', 'action' => 'index']);
             }
         }
+    }
+
+    protected function login($user_id)
+    {
+        $userMapper = new UserMapper();
+        $currentUser = $userMapper->getUserById($user_id);
+
+        if (is_null($user_id) or !$currentUser) {
+            $this->addMessage('couldNotFindRequestedUser', 'danger');
+            $this->redirect(['module' => 'user', 'controller' => 'login', 'action' => 'index']);
+        }
+
+        $_SESSION['user_id'] = $currentUser->getId();
+
+        $cookieStolenMapper = new CookieStolenMapper();
+
+        if ($cookieStolenMapper->containsCookieStolen($currentUser->getId())) {
+            // The user receives a strongly worded warning that his cookie might be stolen.
+            $cookieStolenMapper->deleteCookieStolen($currentUser->getId());
+            $this->addMessage('cookieStolen', 'danger');
+        }
+
+        if ($_SESSION['steamauth']['rememberMe']) {
+            $authTokenModel = new AuthTokenModel();
+
+            // 9 bytes of random data (base64 encoded to 12 characters) for the selector.
+            // This provides 72 bits of keyspace and therefore 236 bits of collision resistance (birthday attacks)
+            $authTokenModel->setSelector(base64_encode(openssl_random_pseudo_bytes(9)));
+            // 33 bytes (264 bits) of randomness for the actual authenticator. This should be unpredictable in all practical scenarios.
+            $authenticator = openssl_random_pseudo_bytes(33);
+            // SHA256 hash of the authenticator. This mitigates the risk of user impersonation following information leaks.
+            $authTokenModel->setToken(hash('sha256', $authenticator));
+            $authTokenModel->setUserid($currentUser->getId());
+            $authTokenModel->setExpires(date('Y-m-d\TH:i:s', strtotime( '+14 days' )));
+
+            setcookie('remember', $authTokenModel->getSelector().':'.base64_encode($authenticator), strtotime( '+14 days' ), '/', $_SERVER['SERVER_NAME'], (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off'), true);
+
+            $authTokenMapper = new AuthTokenMapper();
+            $authTokenMapper->addAuthToken($authTokenModel);
+        }
+        unset($_SESSION['steamauth']['rememberMe']);
+        
+        return true;
     }
 
     /**
