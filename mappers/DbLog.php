@@ -6,13 +6,6 @@ use Ilch\Date;
 use Ilch\Mapper;
 use Modules\Steamauth\Models\Log;
 
-function mist($mixed = [])
-{
-    ob_start();
-    print_r($mixed);
-    return [ "vardump" => ob_get_clean()];
-}
-
 class DbLog extends Mapper {
     /**
      * Shortcut for an info log message
@@ -21,8 +14,6 @@ class DbLog extends Mapper {
      * @param $data     mixed   Additional information
      *
      * @return int
-     *
-     **
      */
     public function info($message, $data = [])
     {
@@ -39,7 +30,6 @@ class DbLog extends Mapper {
      */
     public function dump($message, $data = [])
     {
-        //        $data = mist($data);
         return $this->log('dump', $message, $data);
     }
 
