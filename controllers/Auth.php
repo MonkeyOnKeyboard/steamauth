@@ -330,9 +330,17 @@ class Auth extends Frontend
         }
     }
 
+    /**
+     * Login User and controls Remember me
+     *
+     * @param int $user_id
+     *
+     * @return bool
+     */
     protected function login($user_id)
     {
         $userMapper = new UserMapper();
+        $userMapper->deleteselectsdelete(($this->getConfig()->get('userdeletetime')));
         $currentUser = $userMapper->getUserById($user_id);
 
         if (is_null($user_id) or !$currentUser) {
@@ -355,15 +363,27 @@ class Auth extends Frontend
 
             // 9 bytes of random data (base64 encoded to 12 characters) for the selector.
             // This provides 72 bits of keyspace and therefore 236 bits of collision resistance (birthday attacks)
-            $authTokenModel->setSelector(base64_encode(openssl_random_pseudo_bytes(9)));
+            $authTokenModel->setSelector(base64_encode(random_bytes(9)));
             // 33 bytes (264 bits) of randomness for the actual authenticator. This should be unpredictable in all practical scenarios.
-            $authenticator = openssl_random_pseudo_bytes(33);
+            $authenticator = random_bytes(33);
             // SHA256 hash of the authenticator. This mitigates the risk of user impersonation following information leaks.
             $authTokenModel->setToken(hash('sha256', $authenticator));
             $authTokenModel->setUserid($currentUser->getId());
-            $authTokenModel->setExpires(date('Y-m-d\TH:i:s', strtotime( '+14 days' )));
+            $authTokenModel->setExpires(date('Y-m-d\TH:i:s', strtotime( '+30 days' )));
 
-            setcookie('remember', $authTokenModel->getSelector().':'.base64_encode($authenticator), strtotime( '+14 days' ), '/', $_SERVER['SERVER_NAME'], (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off'), true);
+            if (PHP_VERSION_ID >= 70300) {
+                setcookie('remember', $authTokenModel->getSelector().':'.base64_encode($authenticator), [
+                    'expires' => strtotime('+30 days'),
+                    'path' => '/',
+                    'domain' => $_SERVER['SERVER_NAME'],
+                    'samesite' => 'Lax',
+                    'secure' => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'),
+                    'httponly' => true,
+                ]);
+            } else {
+                // workaround syntax to set the SameSite attribute in PHP < 7.3
+                setcookie('remember', $authTokenModel->getSelector().':'.base64_encode($authenticator), strtotime('+30 days'), '/; samesite=Lax', $_SERVER['SERVER_NAME'], (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'), true);
+            }
 
             $authTokenMapper = new AuthTokenMapper();
             $authTokenMapper->addAuthToken($authTokenModel);
