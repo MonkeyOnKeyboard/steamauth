@@ -13,7 +13,7 @@ class Config extends \Ilch\Config\Install
         'icon_small' => 'fa-steam-square',
         'author' => 'FAOS | MonkeyOnKeyboard',
         'hide_menu' => true,
-        'version' => '1.0.3',
+        'version' => '1.0.4',
         'languages' => [
             'de_DE' => [
                 'name' => 'Anmelden mit Steam',
@@ -24,7 +24,7 @@ class Config extends \Ilch\Config\Install
                 'description' => 'Allows users to sign in through Steam.',
             ],
         ],
-        'ilchCore' => '2.1.34',
+        'ilchCore' => '2.1.41',
         'phpVersion' => '7.0'
     ];
 
@@ -64,8 +64,8 @@ class Config extends \Ilch\Config\Install
             ])
             ->execute();
 
-            $databaseConfig = new \Ilch\Config\Database($this->db());
-            $databaseConfig->set('steamauth_apikey', '');
+        $databaseConfig = new \Ilch\Config\Database($this->db());
+        $databaseConfig->set('steamauth_apikey', '');
 
     }
 
@@ -101,7 +101,10 @@ class Config extends \Ilch\Config\Install
              /*
              Security change (SameSite-Attribut)
              */
-
+            case "1.0.3":
+             /*
+             some changes
+             */
         }
     }
 

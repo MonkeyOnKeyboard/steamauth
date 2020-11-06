@@ -35,9 +35,16 @@ return [
 
     'steamauth.unlinkedsuccessfully' => 'Link successfully removed.',
     'steamauth.linksuccess' => 'Accounts successfully linked.',
+    'steamauth.linkfailed' => 'Failure to link.',
+    'steamauth.providerAlreadyLinked' => 'Accounts already linked.',
+    'steamauth.accountAlreadyLinkedToDifferentUser' => 'Account already linked.',
     'steamauth.badrequest' => 'Bad request',
     'steamauth.notauthenticated' => 'Not authenticated',
-    'steamauth.authenticationfailure' => 'Authentication error',
+    
+    'steamauth.userLocked' => 'User is locked. Login therefore not possible.',
+    'steamauth.userSelectsDelete' => 'User was marked for delete. This process was canceled.',
+    'steamauth.cookieStolen' => 'Someone has possibly stolen your cookie. Please check your systems for malware and change your password.',
+
 
     'steamauth.inspectinglogmessage' => 'Inspect log message',
     'steamauth.confirmdelete' => 'Do you really want to delete this log message? This cannot be undone.',

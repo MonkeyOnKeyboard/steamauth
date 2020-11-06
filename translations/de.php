@@ -3,7 +3,7 @@ return [
     'steamauth.menu.signinwithapi' => 'Anmelden mit Steam',
     'steamauth.menu.apikeys' => 'API Keys',
     'steamauth.menu.logs' => 'Logs',
-    
+
 
     'steamauth.logs' => 'Logs',
 
@@ -22,10 +22,10 @@ return [
     'steamauth.steamauth' => 'Anmelden mit Steam',
     'steamauth.passwordandemailneeded' => 'Bitte teile uns abschlie&szlig;end noch deine E-Mail-Adresse mit und w&auml;hle deinen Benutzernamen.',
     'steamauth.rules' => 'Mit dem Klick auf "Anmeldung abschlie&szlig;en..." best&auml;tigst du, dass du die nachfolgenden Regeln gelesen und akzeptierst hast.',
-    
+
     'steamauth.logindenied' => 'Anmeldung verweigert',
     'steamauth.loginsuccess' => 'Erfolgreich angemeldet',
-    
+
     'steamauth.username' => 'Benutzername',
     'steamauth.email' => 'E-Mail-Adresse',
 
@@ -35,9 +35,16 @@ return [
 
     'steamauth.unlinkedsuccessfully' => 'Verkn&uuml;pfung wurde entfernt.',
     'steamauth.linksuccess' => 'Konten erfolgreich verkn&uuml;pft.',
+    'steamauth.linkfailed' => 'Fehler bei dem Verkn&uuml;pfen.',
+    'steamauth.providerAlreadyLinked' => 'Konten bereits verkn&uuml;pft.',
+    'steamauth.accountAlreadyLinkedToDifferentUser' => 'Konto bereits verkn&uuml;pft.',
     'steamauth.badrequest' => 'Falscher Zugriff',
     'steamauth.notauthenticated' => 'Nicht Authentifiziert',
-    'steamauth.authenticationfailure' => 'Authentifikationsfehler',
+
+    'steamauth.userLocked' => 'Benutzer ist gesperrt. Eine Anmeldung ist daher nicht möglich.',
+    'steamauth.userSelectsDelete' => 'Benutzer war für löschen markiert. Dieser vorgang wurde abgebrochen.',
+    'steamauth.cookieStolen' => 'Möglicherweise hat jemand Ihren Cookie gestohlen. Bitte prüfen Sie Ihre Systeme auf Computerschädlinge und ändern Ihr Passwort.',
+
 
     'steamauth.inspectinglogmessage' => 'Inspiziere Log-Message',
     'steamauth.confirmdelete' => 'Soll diese Log-Message wirklich gel&ouml;scht werden? Diese Aktion kann nicht r&uuml;ckg&auml;ngig gemacht werden.',
@@ -51,5 +58,5 @@ return [
     'steamauth.loghasbeencleared' => 'Der Log wurde geleert.',
     'steamauth.confirmclear' => 'M&ouml;chtest du wirklich den gesamten Log l&ouml;schen?',
 
-    'steamauth.messages.registrationNotAllowed' => 'Die Anmeldung ist aktuell geschlossen.',
+    'steamauth.registrationNotAllowed' => 'Die Anmeldung ist aktuell geschlossen.',
 ];
