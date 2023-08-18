@@ -160,7 +160,7 @@ class DbLog extends Mapper {
      */
     protected function isValidJson($value)
     {
-        $temp = @json_decode($value, true);
+        $temp = @json_decode($value[0]);
 
         return json_last_error() === JSON_ERROR_NONE && ! is_null($temp);
     }
