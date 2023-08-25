@@ -38,7 +38,7 @@ class Config extends \Ilch\Config\Install
                 ->values([
                     'key' => 'steamauth_steam',
                     'name' => 'Steam',
-                    'icon' => 'fa-steam-square'
+                    'icon' => 'fa-brands fa-square-steam'
                 ])
                 ->execute();
         }
