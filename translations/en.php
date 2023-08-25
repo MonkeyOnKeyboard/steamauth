@@ -58,5 +58,5 @@ return [
     'steamauth.loghasbeencleared' => 'Log was successfully cleared.',
     'steamauth.confirmclear' => 'Do you really want to clear the complete log??',
 
-    'steamauth.messages.registrationNotAllowed' => 'Registration is currently not allowed.',
+    'steamauth.registrationNotAllowed' => 'Registration is currently not allowed.',
 ];

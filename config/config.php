@@ -6,14 +6,16 @@
 
 namespace Modules\Steamauth\Config;
 
+use Ilch\Config\Database;
+
 class Config extends \Ilch\Config\Install
 {
     public $config = [
         'key' => 'steamauth',
-        'icon_small' => 'fa-steam-square',
+        'icon_small' => 'fa-brands fa-square-steam',
         'author' => 'FAOS | MonkeyOnKeyboard',
         'hide_menu' => true,
-        'version' => '1.0.4',
+        'version' => '1.0.5',
         'languages' => [
             'de_DE' => [
                 'name' => 'Anmelden mit Steam',
@@ -24,8 +26,8 @@ class Config extends \Ilch\Config\Install
                 'description' => 'Allows users to sign in through Steam.',
             ],
         ],
-        'ilchCore' => '2.1.41',
-        'phpVersion' => '7.0'
+        'ilchCore' => '2.1.48',
+        'phpVersion' => '7.3'
     ];
 
     public function install()
@@ -64,7 +66,7 @@ class Config extends \Ilch\Config\Install
             ])
             ->execute();
 
-        $databaseConfig = new \Ilch\Config\Database($this->db());
+        $databaseConfig = new Database($this->db());
         $databaseConfig->set('steamauth_apikey', '');
 
     }
@@ -105,11 +107,14 @@ class Config extends \Ilch\Config\Install
              /*
              some changes
              */
+            case "1.0.4":
+                $this->db()->query("UPDATE `[prefix]_modules` SET `icon_small` = '" . $this->config['icon_small'] . "' WHERE `key` = '" . $this->config['key'] . "';");
+                // no break
         }
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     private function providerExists()
     {

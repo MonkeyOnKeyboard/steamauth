@@ -3,6 +3,7 @@
 namespace Modules\Steamauth\Controllers;
 
 use Ilch\Controller\Frontend;
+use Ilch\Date;
 use Modules\Steamauth\Libs\SteamAuth as SteamOAuth;
 use Modules\Steamauth\Mappers\DbLog;
 use Modules\User\Mappers\AuthProvider;
@@ -74,7 +75,7 @@ class Auth extends Frontend
             $registMapper = new UserMapper();
             $groupMapper = new Group();
             $userGroup = $groupMapper->getGroupById(2);
-            $currentDate = new \Ilch\Date();
+            $currentDate = new Date();
 
             $user = (new User())
                 ->setName($input['userName'])
@@ -133,7 +134,6 @@ class Auth extends Frontend
     {
         if (loggedIn()) {
             $authProvider = new AuthProvider();
-            $authProviderUser = $authProvider->getLinkedProviderDetails('steamauth_steam', currentUser()->getId());
 
             if ($this->getRequest()->isPost()) {
                 $res = $authProvider->unlinkUser('steamauth_steam', currentUser()->getId());
@@ -216,8 +216,6 @@ class Auth extends Frontend
         $auth = new SteamOAuth(
             $this->getConfig()->get('steamauth_apikey')
         );
-        
-        $steamUser = [];
 
         try {
             $steamUser = [
@@ -362,7 +360,7 @@ class Auth extends Frontend
      *
      * @return LoginResult
      */
-    protected function login(int $user_id)
+    protected function login(int $user_id): LoginResult
     {
         $userMapper = new UserMapper();
         $userMapper->deleteselectsdelete(($this->getConfig()->get('userdeletetime')));
@@ -405,7 +403,7 @@ class Auth extends Frontend
     /**
      * @return DbLog
      */
-    protected function dbLog()
+    protected function dbLog(): DbLog
     {
         if ($this->dbLog instanceof DbLog) {
             return $this->dbLog;

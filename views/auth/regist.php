@@ -1,7 +1,7 @@
 <link href="<?=$this->getModuleUrl('static/css/steam.css') ?>" rel="stylesheet">
 
 <form class="form-horizontal" method="POST" action="<?= $this->getUrl(['action' => 'save']) ?>" autocomplete="off">
-    <legend><i class="fab fa-steam-square steamBlue"></i> <?=$this->getTrans('steamauth.steamauth') ?></legend>
+    <legend><i class="fa-brands fa-square-steam steamBlue"></i> <?=$this->getTrans('steamauth.steamauth') ?></legend>
     <div class="panel panel-default">
         <div class="bg-info panel-body">
             <?= $this->getTrans('steamauth.passwordandemailneeded') ?>
@@ -40,7 +40,7 @@
             <?= $this->getTrans('steamauth.rules') ?>
         </div>
         <div class="panel-footer">
-            <button type="submit" class="btn btn-primary"><i class="fas fa-arrow-right"></i> <?= $this->getTrans('steamauth.completeregistration') ?></button>
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-arrow-right"></i> <?= $this->getTrans('steamauth.completeregistration') ?></button>
             <a href="#" class="btn btn-default"><?= $this->getTrans('steamauth.cancel') ?></a>
         </div>
     </div>

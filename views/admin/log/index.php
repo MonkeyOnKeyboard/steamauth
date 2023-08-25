@@ -1,4 +1,6 @@
-<?php /** @var $this \Ilch\View */ ?>
+<?php /** @var $this \Ilch\View */
+
+use Modules\Steamauth\Models\Log; ?>
 
 <script>
     function syntaxHighlight(json) {
@@ -7,7 +9,7 @@
         }
         json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-            var cls = 'number';
+            let cls = 'number';
             if (/^"/.test(match)) {
                 if (/:$/.test(match)) {
                     cls = 'key';
@@ -71,7 +73,7 @@
 
 <div class="panel panel-default">
     <div class="panel-heading clearfix">
-        <i class="fas fa-list"></i> <?= $this->getTrans('steamauth.logmessages') ?>
+        <i class="fa-solid fa-list"></i> <?= $this->getTrans('steamauth.logmessages') ?>
         <form id="clearAll" action="<?= $this->getUrl(['action' => 'clear']) ?>" method="POST" class="pull-right">
             <?= $this->getTokenField() ?>
 
@@ -79,14 +81,14 @@
                 if (confirm('<?= $this->getTrans('steamauth.confirmclear') ?>')) {
                 document.getElementById('clearAll').submit();
                 }">
-                <i class="fas fa-trash-alt"></i> <?= $this->getTrans('steamauth.clearlogs') ?>
+                <i class="fa-solid fa-trash-can"></i> <?= $this->getTrans('steamauth.clearlogs') ?>
             </button>
         </form>
     </div>
     <!-- List group -->
     <ul class="list-group">
-        <?php while($log = $this->get('logs')->fetchObject(\Modules\Steamauth\Models\Log::class, [])): ?>
-            <?php /** @var $log \Modules\Apiauth\Models\Log */ ?>
+        <?php while($log = $this->get('logs')->fetchObject(Log::class, [])): ?>
+            <?php /** @var $log Log */ ?>
             <li class="list-group-item">
                 <div class="log">
                     <div class="type <?= $log->getType() ?>">
@@ -101,7 +103,7 @@
                     <?php if ($log->hasData()): ?>
                         <div class="inspect">
                             <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#inspectLogMessage-<?= $log->getId() ?>">
-                                <i class="fas fa-search"></i>
+                                <i class="fa-solid fa-magnifying-glass"></i>
                             </button>
                         </div>
                     <?php endif; ?>
@@ -113,7 +115,7 @@
                                 if (confirm('<?= $this->getTrans('steamauth.confirmdelete') ?>')) {
                                     document.getElementById('deleteLogMessage-<?= $log->getId() ?>').submit();
                                 }">
-                                <i class="fas fa-trash-alt"></i>
+                                <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </form>
                     </div>
