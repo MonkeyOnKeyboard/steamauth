@@ -34,12 +34,12 @@ class Base extends Admin {
     /**
      * Checks if the menu item is active
      *
-     * @param $controller
-     * @param $action
+     * @param string $controller
+     * @param string $action
      *
      * @return bool
      */
-    protected function isActive($controller, $action): bool
+    protected function isActive(string $controller, string $action): bool
     {
         return $this->getRequest()->getControllerName() === $controller && $this->getRequest()->getActionName() === $action;
     }
