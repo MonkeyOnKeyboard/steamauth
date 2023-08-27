@@ -49,7 +49,7 @@ class Log extends Model
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -57,7 +57,7 @@ class Log extends Model
     /**
      * @param int $id
      */
-    public function setId($id)
+    public function setId(int $id)
     {
         $this->id = $id;
     }
@@ -65,7 +65,7 @@ class Log extends Model
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
@@ -73,7 +73,7 @@ class Log extends Model
     /**
      * @param string $type
      */
-    public function setType($type)
+    public function setType(string $type)
     {
         $this->type = $type;
     }
@@ -81,7 +81,7 @@ class Log extends Model
     /**
      * @return string
      */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
@@ -89,7 +89,7 @@ class Log extends Model
     /**
      * @param string $message
      */
-    public function setMessage($message)
+    public function setMessage(string $message)
     {
         $this->message = $message;
     }
@@ -97,7 +97,7 @@ class Log extends Model
     /**
      * @return string
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): string
     {
         return $this->created_at;
     }
@@ -105,7 +105,7 @@ class Log extends Model
     /**
      * @param string $created_at
      */
-    public function setCreatedAt($created_at)
+    public function setCreatedAt(string $created_at)
     {
         $this->created_at = $created_at;
     }
@@ -113,7 +113,7 @@ class Log extends Model
     /**
      * @return string
      */
-    public function getData()
+    public function getData(): string
     {
         return $this->data;
     }
@@ -121,7 +121,7 @@ class Log extends Model
     /**
      * @param string $data
      */
-    public function setData($data)
+    public function setData(string $data)
     {
         $this->data = $data;
     }
@@ -129,7 +129,7 @@ class Log extends Model
     /**
      * @return bool
      */
-    public function hasData()
+    public function hasData(): bool
     {
         return !empty($this->getData());
     }
@@ -137,7 +137,7 @@ class Log extends Model
     /**
      * @return Date
      */
-    public function getLocalizedCreatedAt()
+    public function getLocalizedCreatedAt(): Date
     {
         $config = Registry::get('config');
         $timezone = new DateTimeZone($config->get('timezone'));

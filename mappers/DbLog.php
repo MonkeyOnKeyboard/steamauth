@@ -2,6 +2,7 @@
 
 namespace Modules\Steamauth\Mappers;
 
+use Ilch\Database\Mysql\Result;
 use Ilch\Date;
 use Ilch\Mapper;
 use Modules\Steamauth\Models\Log;
@@ -15,7 +16,7 @@ class DbLog extends Mapper {
      *
      * @return int
      */
-    public function info($message, $data = [])
+    public function info(string $message, $data = []): int
     {
         return $this->log('info', $message, $data);
     }
@@ -28,7 +29,7 @@ class DbLog extends Mapper {
      *
      * @return int
      */
-    public function dump($message, $data = [])
+    public function dump(string $message, $data = []): int
     {
         return $this->log('dump', $message, $data);
     }
@@ -38,7 +39,7 @@ class DbLog extends Mapper {
      * @param array $data
      * @return int
      */
-    public function debug($message, $data = [])
+    public function debug($message, array $data = []): int
     {
         return $this->log('debug', $message, $data);
     }
@@ -51,7 +52,7 @@ class DbLog extends Mapper {
      *
      * @return int
      */
-    public function error($message, $data = [])
+    public function error(string $message, $data = []): int
     {
         return $this->log('error', $message, $data);
     }
@@ -65,7 +66,7 @@ class DbLog extends Mapper {
      *
      * @return int
      */
-    public function log($type, $message, $data)
+    public function log(string $type, string $message, $data): int
     {
         if (! $this->isValidJson($data)) {
             $data = json_encode($data);
@@ -85,9 +86,9 @@ class DbLog extends Mapper {
     /**
      * Get log messages
      *
-     * @return \Ilch\Database\Mysql\Result
+     * @return Result
      */
-    public function getAll()
+    public function getAll(): Result
     {
         return $this->db()
         ->select('*')
@@ -100,12 +101,12 @@ class DbLog extends Mapper {
     /**
      * Finds the log message with the given id
      *
-     * @param $logId
-     * @param string $fields
+     * @param int $logId
+     * @param string[] $fields
      *
      * @return Log|null
      */
-    public function find($logId, $fields = '*')
+    public function find(int $logId, array $fields = ['*']): ?Log
     {
         return $this->db()
         ->select($fields)
@@ -121,7 +122,7 @@ class DbLog extends Mapper {
      *
      * @return int  Affected rows
      */
-    public function clear()
+    public function clear(): int
     {
         return $this->db()->delete('steamauth_log')
         ->where(['id >' => 0])
@@ -131,13 +132,13 @@ class DbLog extends Mapper {
     /**
      * Deletes the given log message
      *
-     * @param $logId
+     * @param int $logId
      *
-     * @return \Ilch\Database\Mysql\Result|int
+     * @return Result|int
      *
      * @throws \Exception
      */
-    public function delete($logId)
+    public function delete(int $logId)
     {
         $log = $this->find($logId);
 
@@ -158,7 +159,7 @@ class DbLog extends Mapper {
      *
      * @return bool
      */
-    protected function isValidJson($value)
+    protected function isValidJson($value): bool
     {
         $temp = @json_decode($value[0]);
 
