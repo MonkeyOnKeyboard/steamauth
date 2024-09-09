@@ -5,10 +5,10 @@
     </div>
     <?=$this->getTokenField() ?>
     <div class="row-mb-3">
-        <label for="consumerKeyInput" class="col-lg-2 control-label">
+        <label for="consumerKeyInput" class="col-xl-2 control-label">
             <?=$this->getTrans('steamauth.consumerkey') ?>:
         </label>
-        <div class="col-lg-10">
+        <div class="col-xl-10">
             <input type="text"
                    class="form-control"
                    id="consumerKeyInput"

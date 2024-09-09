@@ -41,7 +41,7 @@
         </div>
         <div class="card-footer">
             <button type="submit" class="btn btn-primary"><i class="fa-solid fa-arrow-right"></i> <?= $this->getTrans('steamauth.completeregistration') ?></button>
-            <a href="#" class="btn btn-default"><?= $this->getTrans('steamauth.cancel') ?></a>
+            <a href="#" class="btn btn-secondary"><?= $this->getTrans('steamauth.cancel') ?></a>
         </div>
     </div>
 </form>
