@@ -1,6 +1,6 @@
 <link href="<?=$this->getModuleUrl('static/css/steam.css') ?>" rel="stylesheet">
 
-<form class="form-horizontal" method="POST" action="<?= $this->getUrl(['action' => 'save']) ?>" autocomplete="off">
+<form method="POST" action="<?= $this->getUrl(['action' => 'save']) ?>" autocomplete="off">
     <legend><i class="fa-brands fa-square-steam steamBlue"></i> <?=$this->getTrans('steamauth.steamauth') ?></legend>
     <div class="card card-default">
         <div class="bg-info card-body">
@@ -8,11 +8,11 @@
         </div>
         <div class="card-body">
             <?=$this->getTokenField() ?>
-            <div class="form-group <?= ! $this->validation()->hasError('userName') ?: 'has-error' ?>">
-                <label for="userNameInput" class="col-lg-3 control-label">
+            <div class="row-mb-3 <?= ! $this->validation()->hasError('userName') ?: 'has-error' ?>">
+                <label for="userNameInput" class="col-xl-3 col-form-label">
                     <?=$this->getTrans('steamauth.username') ?>:
                 </label>
-                <div class="col-lg-9">
+                <div class="col-xl-9">
                     <input type="text"
                            class="form-control"
                            id="userNameInput"
@@ -20,11 +20,11 @@
                            value="<?= $this->originalInput('userName', $this->get('user')['screen_name']) ?>" />
                 </div>
             </div>
-            <div class="form-group <?= ! $this->validation()->hasError('email') ?: 'has-error' ?>">
-                <label for="emailInput" class="col-lg-3 control-label">
+            <div class="row-mb-3 <?= ! $this->validation()->hasError('email') ?: 'has-error' ?>">
+                <label for="emailInput" class="col-xl-3 col-form-label">
                     <?=$this->getTrans('steamauth.email') ?>:
                 </label>
-                <div class="col-lg-9">
+                <div class="col-xl-9">
                     <input type="email"
                            class="form-control"
                            id="emailInput"

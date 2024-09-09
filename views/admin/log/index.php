@@ -70,78 +70,79 @@ use Modules\Steamauth\Models\Log; ?>
 </style>
 
 <h2><?= $this->getTrans('steamauth.logs') ?></h2>
+<div class="row">
+    <div class="card card-default">
+        <div class="card-heading clearfix">
+            <i class="fa-solid fa-list"></i> <?= $this->getTrans('steamauth.logmessages') ?>
+            <form id="clearAll" action="<?= $this->getUrl(['action' => 'clear']) ?>" method="POST" class="float-end">
+                <?= $this->getTokenField() ?>
 
-<div class="card card-default">
-    <div class="card-heading clearfix">
-        <i class="fa-solid fa-list"></i> <?= $this->getTrans('steamauth.logmessages') ?>
-        <form id="clearAll" action="<?= $this->getUrl(['action' => 'clear']) ?>" method="POST" class="pull-right">
-            <?= $this->getTokenField() ?>
-
-            <button type="submit" class="btn btn-danger btn-xs" onClick="event.preventDefault();
-                if (confirm('<?= $this->getTrans('steamauth.confirmclear') ?>')) {
-                document.getElementById('clearAll').submit();
-                }">
-                <i class="fa-solid fa-trash-can"></i> <?= $this->getTrans('steamauth.clearlogs') ?>
-            </button>
-        </form>
-    </div>
-    <!-- List group -->
-    <ul class="list-group">
-        <?php while($log = $this->get('logs')->fetchObject(Log::class, [])): ?>
-            <?php /** @var $log Log */ ?>
-            <li class="list-group-item">
-                <div class="log">
-                    <div class="type <?= $log->getType() ?>">
-                        <?= $log->getType() ?>
-                    </div>
-                    <div class="time">
-                        <?= $log->getLocalizedCreatedAt() ?>
-                    </div>
-                    <div class="grow">
-                        <?= $log->getMessage() ?>
-                    </div>
-                    <?php if ($log->hasData()): ?>
-                        <div class="inspect">
-                            <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#inspectLogMessage-<?= $log->getId() ?>">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                            </button>
+                <button type="submit" class="btn btn-danger btn-xs" onClick="event.preventDefault();
+                    if (confirm('<?= $this->getTrans('steamauth.confirmclear') ?>')) {
+                    document.getElementById('clearAll').submit();
+                    }">
+                    <i class="fa-solid fa-trash-can"></i> <?= $this->getTrans('steamauth.clearlogs') ?>
+                </button>
+            </form>
+        </div>
+        <!-- List group -->
+        <ul class="list-group">
+            <?php while($log = $this->get('logs')->fetchObject(Log::class, [])): ?>
+                <?php /** @var $log Log */ ?>
+                <li class="list-group-item">
+                    <div class="log">
+                        <div class="type <?= $log->getType() ?>">
+                            <?= $log->getType() ?>
                         </div>
-                    <?php endif; ?>
-                    <div class="remove">
-                        <form id="deleteLogMessage-<?= $log->getId() ?>" action="<?= $this->getUrl(['action' => 'delete', 'id' => $log->getId()]) ?>" method="POST" class="pull-right">
-                            <?= $this->getTokenField() ?>
+                        <div class="time">
+                            <?= $log->getLocalizedCreatedAt() ?>
+                        </div>
+                        <div class="grow">
+                            <?= $log->getMessage() ?>
+                        </div>
+                        <?php if ($log->hasData()): ?>
+                            <div class="inspect">
+                                <button type="button" class="btn btn-primary btn-xs" data-bs-toggle="modal" data-bs-target="#inspectLogMessage-<?= $log->getId() ?>">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </button>
+                            </div>
+                        <?php endif; ?>
+                        <div class="remove">
+                            <form id="deleteLogMessage-<?= $log->getId() ?>" action="<?= $this->getUrl(['action' => 'delete', 'id' => $log->getId()]) ?>" method="POST" class="float-end">
+                                <?= $this->getTokenField() ?>
 
-                            <button type="submit" class="btn btn-danger btn-xs" onClick="event.preventDefault();
-                                if (confirm('<?= $this->getTrans('steamauth.confirmdelete') ?>')) {
-                                    document.getElementById('deleteLogMessage-<?= $log->getId() ?>').submit();
-                                }">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </li>
-            <?php if ($log->hasData()): ?>
-                <div class="modal fade" id="inspectLogMessage-<?= $log->getId() ?>" tabindex="-1" role="dialog" aria-labelledby="LogMessage">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="myModalLabel"><?= $this->getTrans('steamauth.inspectinglogmessage') ?></h4>
-                            </div>
-                            <div class="modal-body">
-                                <pre class="json"><script>document.write(syntaxHighlight(JSON.stringify(JSON.parse('<?= $log->getData() ?>'), null, 2)))</script></pre>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal"><?= $this->getTrans('steamauth.close') ?></button>
-                            </div>
+                                <button type="submit" class="btn btn-danger btn-xs" onClick="event.preventDefault();
+                                    if (confirm('<?= $this->getTrans('steamauth.confirmdelete') ?>')) {
+                                        document.getElementById('deleteLogMessage-<?= $log->getId() ?>').submit();
+                                    }">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </form>
                         </div>
                     </div>
-                </div>
+                </li>
+                <?php if ($log->hasData()): ?>
+                    <div class="modal fade" id="inspectLogMessage-<?= $log->getId() ?>" tabindex="-1" role="dialog" aria-labelledby="LogMessage">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel"><?= $this->getTrans('steamauth.inspectinglogmessage') ?></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <pre class="json"><script>document.write(syntaxHighlight(JSON.stringify(JSON.parse('<?= $log->getData() ?>'), null, 2)))</script></pre>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= $this->getTrans('steamauth.close') ?></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            <?php endwhile; ?>
+            <?php if ($this->get('logs')->getNumRows() === 0): ?>
+                <li class="list-group-item"><?= $this->getTrans('steamauth.nologsfound') ?></li>
             <?php endif; ?>
-        <?php endwhile; ?>
-        <?php if ($this->get('logs')->getNumRows() === 0): ?>
-            <li class="list-group-item"><?= $this->getTrans('steamauth.nologsfound') ?></li>
-        <?php endif; ?>
-    </ul>
+        </ul>
+    </div>
 </div>
