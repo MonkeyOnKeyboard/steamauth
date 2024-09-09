@@ -15,7 +15,7 @@ class Config extends \Ilch\Config\Install
         'icon_small' => 'fa-brands fa-square-steam',
         'author' => 'FAOS | MonkeyOnKeyboard',
         'hide_menu' => true,
-        'version' => '1.0.6',
+        'version' => '1.0.7',
         'languages' => [
             'de_DE' => [
                 'name' => 'Anmelden mit Steam',
@@ -117,6 +117,10 @@ class Config extends \Ilch\Config\Install
             case "1.0.6":
                 /*
                 update to ilch 2.2.0 core
+                */
+            case "1.0.7":
+                /*
+                some bugfixes BS5
                 */
         }
     }
