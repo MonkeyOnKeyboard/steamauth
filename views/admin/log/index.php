@@ -71,8 +71,8 @@ use Modules\Steamauth\Models\Log; ?>
 
 <h2><?= $this->getTrans('steamauth.logs') ?></h2>
 
-<div class="panel panel-default">
-    <div class="panel-heading clearfix">
+<div class="card card-default">
+    <div class="card-heading clearfix">
         <i class="fa-solid fa-list"></i> <?= $this->getTrans('steamauth.logmessages') ?>
         <form id="clearAll" action="<?= $this->getUrl(['action' => 'clear']) ?>" method="POST" class="pull-right">
             <?= $this->getTokenField() ?>

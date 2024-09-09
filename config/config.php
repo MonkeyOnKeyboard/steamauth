@@ -15,7 +15,7 @@ class Config extends \Ilch\Config\Install
         'icon_small' => 'fa-brands fa-square-steam',
         'author' => 'FAOS | MonkeyOnKeyboard',
         'hide_menu' => true,
-        'version' => '1.0.5',
+        'version' => '1.0.6',
         'languages' => [
             'de_DE' => [
                 'name' => 'Anmelden mit Steam',
@@ -26,8 +26,8 @@ class Config extends \Ilch\Config\Install
                 'description' => 'Allows users to sign in through Steam.',
             ],
         ],
-        'ilchCore' => '2.1.48',
-        'phpVersion' => '7.3'
+        'ilchCore' => '2.2.0',
+        'phpVersion' => '7.4'
     ];
 
     public function install()
@@ -110,6 +110,14 @@ class Config extends \Ilch\Config\Install
             case "1.0.4":
                 $this->db()->query("UPDATE `[prefix]_modules` SET `icon_small` = '" . $this->config['icon_small'] . "' WHERE `key` = '" . $this->config['key'] . "';");
                 // no break
+            case "1.0.5":
+                /*
+                some changes
+                */
+            case "1.0.6":
+                /*
+                update to ilch 2.2.0 core
+                */
         }
     }
 

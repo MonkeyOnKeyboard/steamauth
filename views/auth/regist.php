@@ -2,11 +2,11 @@
 
 <form class="form-horizontal" method="POST" action="<?= $this->getUrl(['action' => 'save']) ?>" autocomplete="off">
     <legend><i class="fa-brands fa-square-steam steamBlue"></i> <?=$this->getTrans('steamauth.steamauth') ?></legend>
-    <div class="panel panel-default">
-        <div class="bg-info panel-body">
+    <div class="card card-default">
+        <div class="bg-info card-body">
             <?= $this->getTrans('steamauth.passwordandemailneeded') ?>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <?=$this->getTokenField() ?>
             <div class="form-group <?= ! $this->validation()->hasError('userName') ?: 'has-error' ?>">
                 <label for="userNameInput" class="col-lg-3 control-label">
@@ -33,13 +33,13 @@
                 </div>
             </div>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <?= $this->get('rules') ?>
         </div>
-        <div class="bg-info panel-body">
+        <div class="bg-info card-body">
             <?= $this->getTrans('steamauth.rules') ?>
         </div>
-        <div class="panel-footer">
+        <div class="card-footer">
             <button type="submit" class="btn btn-primary"><i class="fa-solid fa-arrow-right"></i> <?= $this->getTrans('steamauth.completeregistration') ?></button>
             <a href="#" class="btn btn-default"><?= $this->getTrans('steamauth.cancel') ?></a>
         </div>
