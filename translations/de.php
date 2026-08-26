@@ -1,4 +1,5 @@
 <?php
+
 return [
     'steamauth.menu.signinwithapi' => 'Anmelden mit Steam',
     'steamauth.menu.apikeys' => 'API Keys',

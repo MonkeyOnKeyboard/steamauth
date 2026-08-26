@@ -14,7 +14,6 @@ use Modules\User\Models\User;
 use Modules\User\Service\Password as PasswordService;
 use Ilch\Validation;
 use Modules\User\Mappers\CookieStolen as CookieStolenMapper;
-
 use Modules\User\Service\Remember as RememberMe;
 use Modules\User\Service\Login\Result as LoginResult;
 
@@ -32,7 +31,7 @@ class Auth extends Frontend
     {
         $oauth = array_dot($_SESSION, 'steamauth.login');
 
-        if (!$oauth || array_dot($_SESSION, 'steamauth.login.expires') < time() ) {
+        if (!$oauth || array_dot($_SESSION, 'steamauth.login.expires') < time()) {
             $this->addMessage($this->getTranslator()->trans('steamauth.logindenied'), 'danger');
             $this->redirect(['module' => 'user', 'controller' => 'login', 'action' => 'index']);
         }
@@ -106,15 +105,15 @@ class Auth extends Frontend
                     }
 
                     if ($result->getError() != '') {
-                        $this->addMessage($this->getTranslator()->trans('steamauth.'.$result->getError()), 'warning');
+                        $this->addMessage($this->getTranslator()->trans('steamauth.' . $result->getError()), 'warning');
                     }
 
                     $this->addMessage($this->getTranslator()->trans('steamauth.linksuccess'));
                 } else {
-                    $this->addMessage($this->getTranslator()->trans('steamauth.'.$result->getError()), 'warning');
+                    $this->addMessage($this->getTranslator()->trans('steamauth.' . $result->getError()), 'warning');
                     $redirectUrl = ['module' => 'user', 'controller' => 'login', 'action' => 'index'];
                 }
-                
+
                 $this->redirect($redirectUrl);
                 //$this->redirect(['module' => 'user', 'controller' => 'panel', 'action' => 'index']);
             }
@@ -163,7 +162,7 @@ class Auth extends Frontend
             'controller' => 'auth',
             'action' => 'callback',
         ]);
-    
+
         if ($this->getRequest()->getPost('rememberMe')) {
             array_dot_set($_SESSION, 'steamauth.rememberMe', $this->getRequest()->getPost('rememberMe'));
         }
@@ -175,17 +174,17 @@ class Auth extends Frontend
             $callbackUrl,
             null,
             false
-            );
+        );
 
         try {
             $this->redirect($auth->loginUrl());
         } catch (\Exception $e) {
             $this->addMessage($this->getTranslator()->trans('steamauth.authenticationfailure'), 'danger');
 
-            if (!loggedIn()){
+            if (!loggedIn()) {
                 $userMapper = new UserMapper();
                 $currentUser = $userMapper->getDummyUser();
-            }else{
+            } else {
                 $currentUser = currentUser();
             }
 
@@ -305,15 +304,15 @@ class Auth extends Frontend
                     }
 
                     if ($result->getError() != '') {
-                        $this->addMessage($this->getTranslator()->trans('steamauth.'.$result->getError()), 'warning');
+                        $this->addMessage($this->getTranslator()->trans('steamauth.' . $result->getError()), 'warning');
                     }
 
                     $this->addMessage($this->getTranslator()->trans('steamauth.loginsuccess'));
                 } else {
-                    $this->addMessage($this->getTranslator()->trans('steamauth.'.$result->getError()), 'warning');
+                    $this->addMessage($this->getTranslator()->trans('steamauth.' . $result->getError()), 'warning');
                     $redirectUrl = ['module' => 'user', 'controller' => 'login', 'action' => 'index'];
                 }
-                
+
                 $this->redirect($redirectUrl);
             }
 
@@ -329,13 +328,13 @@ class Auth extends Frontend
         } catch (\Exception $e) {
             $this->addMessage($this->getTranslator()->trans('steamauth.authenticationfailure'), 'danger');
 
-            if (!loggedIn()){
+            if (!loggedIn()) {
                 $userMapper = new UserMapper();
                 $currentUser = $userMapper->getDummyUser();
-            }else{
+            } else {
                 $currentUser = currentUser();
             }
-            
+
             $this->dbLog()->info(
                 "User " . $currentUser->getName() . " has an login error.",
                 [

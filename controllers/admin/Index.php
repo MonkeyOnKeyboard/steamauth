@@ -30,9 +30,9 @@ class Index extends Base
             $dbLog->dump(
                 "API Key gespeichert",
                 ["oldkey" => $oldkey,
-                 "newkey" => $newkey  
+                 "newkey" => $newkey
                 ]
-             );
+            );
 
             $this->addMessage('saveSuccess');
         }
