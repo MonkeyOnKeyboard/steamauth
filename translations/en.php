@@ -1,9 +1,10 @@
 <?php
+
 return [
     'steamauth.menu.signinwithapi' => 'Login with Steam',
     'steamauth.menu.apikeys' => 'API Keys',
     'steamauth.menu.logs' => 'Logs',
-    
+
 
     'steamauth.logs' => 'Logs',
 
@@ -22,10 +23,10 @@ return [
     'steamauth.steamauth' => 'Login with Steam',
     'steamauth.passwordandemailneeded' => 'Please, let us know your E-Mail Address and choose a username.',
     'steamauth.rules' => 'With a click on "Complete registration..." you are acknowleging to have read and accept the following rules.',
-    
+
     'steamauth.logindenied' => 'Login denied',
     'steamauth.loginsuccess' => 'Login successfull',
-    
+
     'steamauth.username' => 'Username',
     'steamauth.email' => 'E-Mail-Address',
 
@@ -40,7 +41,7 @@ return [
     'steamauth.accountAlreadyLinkedToDifferentUser' => 'Account already linked.',
     'steamauth.badrequest' => 'Bad request',
     'steamauth.notauthenticated' => 'Not authenticated',
-    
+
     'steamauth.userLocked' => 'User is locked. Login therefore not possible.',
     'steamauth.userSelectsDelete' => 'User was marked for delete. This process was canceled.',
     'steamauth.cookieStolen' => 'Someone has possibly stolen your cookie. Please check your systems for malware and change your password.',

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Ilch 2
  * @package ilch
@@ -15,7 +16,7 @@ class Config extends \Ilch\Config\Install
         'icon_small' => 'fa-brands fa-square-steam',
         'author' => 'FAOS | MonkeyOnKeyboard',
         'hide_menu' => true,
-        'version' => '1.0.7',
+        'version' => '1.0.8',
         'languages' => [
             'de_DE' => [
                 'name' => 'Anmelden mit Steam',
@@ -43,7 +44,7 @@ class Config extends \Ilch\Config\Install
                 ->execute();
         }
 
-       $this->db()->query('
+        $this->db()->query('
             CREATE TABLE IF NOT EXISTS `[prefix]_steamauth_log` (
               `id` int(32) unsigned NOT NULL AUTO_INCREMENT,
               `type` varchar(50) DEFAULT \'info\',
@@ -68,7 +69,6 @@ class Config extends \Ilch\Config\Install
 
         $databaseConfig = new Database($this->db());
         $databaseConfig->set('steamauth_apikey', '');
-
     }
 
     public function uninstall()
@@ -96,32 +96,19 @@ class Config extends \Ilch\Config\Install
         switch ($installedVersion) {
             case "1.0.0":
             case "1.0.1":
-             /*
-             some changes
-             */
             case "1.0.2":
-             /*
-             Security change (SameSite-Attribut)
-             */
+             // Security change (SameSite-Attribut)
             case "1.0.3":
-             /*
-             some changes
-             */
             case "1.0.4":
                 $this->db()->query("UPDATE `[prefix]_modules` SET `icon_small` = '" . $this->config['icon_small'] . "' WHERE `key` = '" . $this->config['key'] . "';");
                 // no break
             case "1.0.5":
-                /*
-                some changes
-                */
             case "1.0.6":
-                /*
-                update to ilch 2.2.0 core
-                */
+                // update to ilch 2.2.0 core
             case "1.0.7":
-                /*
-                some bugfixes BS5
-                */
+                // some bugfixes BS5
+            case "1.0.8":
+                // code style fixes
         }
     }
 

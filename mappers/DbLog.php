@@ -7,7 +7,8 @@ use Ilch\Date;
 use Ilch\Mapper;
 use Modules\Steamauth\Models\Log;
 
-class DbLog extends Mapper {
+class DbLog extends Mapper
+{
     /**
      * Shortcut for an info log message
      *
@@ -22,7 +23,7 @@ class DbLog extends Mapper {
     }
 
     /**
-     * Shortcut for an debug log message
+     * Shortcut for a debug log message
      *
      * @param $message  string  The message
      * @param $data     mixed   Additional information
@@ -143,7 +144,7 @@ class DbLog extends Mapper {
         $log = $this->find($logId);
 
         if (is_null($log)) {
-            throw new \Exception('No log with id '. $logId . ' found.');
+            throw new \Exception('No log with id ' . $logId . ' found.');
         }
 
         return $this->db()
